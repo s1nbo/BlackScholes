@@ -25,12 +25,8 @@ class BlackScholes:
         self.P = self.K * exp(-self.r*self.t) * N.cdf(-d2) - current_price * N.cdf(-d1)
     
 
-B = BlackScholes()
-B.calculate(current_price=100, strike_price=100, time_to_maturity=1, volatility=0.2, interest_rate=0.05)
-print(B.C)
-print(B.P)
-
-
-
-
-
+if __name__ == "__main__":
+    B = BlackScholes()
+    B.calculate(current_price=100, strike_price=100, time_to_maturity=1, volatility=0.2, interest_rate=0.05)
+    print(B.C)
+    print(B.P)
