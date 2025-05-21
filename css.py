@@ -17,14 +17,14 @@ def css():
 .metric-call {
     background-color: #2b8725; /* Green */
     color: black; /* Font Color */
-    filter: brightness(2);
+    filter: brightness(2.5);
     border-radius: 10px; /* Rounded corners */
 }
 
 .metric-put {
     background-color: #800517; /* Red */
     color: black; /* Font color */
-    filter: brightness(2);
+    filter: brightness(2.5);
     border-radius: 10px; /* Rounded corners */
 }
                 
