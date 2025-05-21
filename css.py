@@ -17,7 +17,6 @@ def css():
 .metric-call {
     background-color: #2b8725; /* Green */
     color: black; /* Font Color */
-    margin-right: 10px; /* Spacing between CALL and PUT */
     border-radius: 10px; /* Rounded corners */
 }
 
