@@ -1,6 +1,6 @@
 import streamlit as st
 
-# TODO Make own CSS
+# TODO Make CSS better
 def css():
     st.markdown("""
 <style>
