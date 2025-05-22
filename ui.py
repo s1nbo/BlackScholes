@@ -1,5 +1,8 @@
 import streamlit as st
+import matplotlib.pyplot as plt
+import time
 from blackScholesBasics import blackScholes
+from stockdata import stockdata
 from css import css
 
 linkedin_url = 'https://www.linkedin.com/in/sinbo/'
@@ -43,3 +46,22 @@ with col2:
     """, unsafe_allow_html=True)
 
 
+plot_placeholder = st.empty()
+data = stockdata()
+
+# Create the figure
+fig, ax = plt.subplots()
+
+# Animation: draw the line incrementally
+for i in range(1, len(data) + 1):
+    ax.clear()  # Clear previous frame
+    ax.plot(data.index[:i], data.values[:i], color='blue')
+    ax.set_title("AAPL Closing Prices (2020)")
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Price (USD)")
+    ax.grid(True)
+    
+    # Show the updated plot in Streamlit
+    plot_placeholder.pyplot(fig)
+    
+    # Wait a short time before showing the next frame
