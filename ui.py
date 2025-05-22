@@ -63,7 +63,7 @@ print(y_min, y_max)
 ax.set_ylim(y_min, y_max)
 
 # Animation loop
-for i in range(1, len(data) + 1):
+for i in range(1, len(data) + 1, 10):
     ax.clear()
 
     # Redraw line with static axis limits
