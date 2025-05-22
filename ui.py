@@ -1,6 +1,6 @@
 import streamlit as st
 import matplotlib.pyplot as plt
-import time
+import matplotlib.dates as mdates
 from blackScholesBasics import blackScholes
 from stockdata import stockdata
 from css import css
@@ -46,22 +46,42 @@ with col2:
     """, unsafe_allow_html=True)
 
 
-plot_placeholder = st.empty()
 data = stockdata()
+# Get axis limits
+x_min, x_max = data.index.min(), data.index.max()
+y_min, y_max = data.min()[0], data.max()[0]
 
-# Create the figure
+# Create a placeholder
+plot_placeholder = st.empty()
+
+# Create figure and axis
 fig, ax = plt.subplots()
 
-# Animation: draw the line incrementally
+# Set static axes limits
+ax.set_xlim(x_min, x_max)
+print(y_min, y_max)
+ax.set_ylim(y_min, y_max)
+
+# Animation loop
 for i in range(1, len(data) + 1):
-    ax.clear()  # Clear previous frame
+    ax.clear()
+
+    # Redraw line with static axis limits
     ax.plot(data.index[:i], data.values[:i], color='blue')
     ax.set_title("AAPL Closing Prices (2020)")
     ax.set_xlabel("Date")
     ax.set_ylabel("Price (USD)")
     ax.grid(True)
     
-    # Show the updated plot in Streamlit
+    # Static limits
+    ax.set_xlim(x_min, x_max)
+    ax.set_ylim(y_min, y_max)
+
+    ax.xaxis.set_major_locator(mdates.MonthLocator())
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %Y'))
+    plt.setp(ax.get_xticklabels(), rotation=45, ha='right')
+
+
     plot_placeholder.pyplot(fig)
     
     # Wait a short time before showing the next frame
