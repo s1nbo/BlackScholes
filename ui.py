@@ -48,6 +48,28 @@ with col2:
     """, unsafe_allow_html=True)
 
 
+
+
+
+st.title("Options Price - Interactive Heatmap")
+col1, col2 = st.columns([1,1], gap="small")
+
+spot_range = linspace(current_price - 20, current_price + 20, 10)
+vol_range = linspace(volatility - 0.1, volatility + 0.1, 10)
+
+heatmap_fig_call, heatmap_fig_put = plot_heatmap(strike=strike, time_to_maturity=time_to_maturity, interest_rate=interest_rate, spot_range=spot_range, vol_range=vol_range)
+
+with col1:
+    st.subheader("Call Price Heatmap")
+    st.pyplot(heatmap_fig_call)
+
+with col2:
+    st.subheader("Put Price Heatmap")
+    st.pyplot(heatmap_fig_put)
+
+
+
+
 data = stockdata()
 # Get axis limits
 x_min, x_max = data.index.min(), data.index.max()
@@ -85,20 +107,3 @@ for i in range(1, len(data) + 1, 10):
 
 
     plot_placeholder.pyplot(fig)
-
-
-st.title("Options Price - Interactive Heatmap")
-col1, col2 = st.columns([1,1], gap="small")
-
-spot_range = linspace(current_price - 20, current_price + 20, 10)
-vol_range = linspace(volatility - 0.1, volatility + 0.1, 10)
-
-heatmap_fig_call, heatmap_fig_put = plot_heatmap(strike=strike, time_to_maturity=time_to_maturity, interest_rate=interest_rate, spot_range=spot_range, vol_range=vol_range)
-
-with col1:
-    st.subheader("Call Price Heatmap")
-    st.pyplot(heatmap_fig_call)
-
-with col2:
-    st.subheader("Put Price Heatmap")
-    st.pyplot(heatmap_fig_put)
