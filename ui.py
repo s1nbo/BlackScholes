@@ -1,9 +1,10 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-from blackScholesBasics import blackScholes
+from blackScholesBasics import blackScholes, plot_heatmap
 from stockdata import stockdata
 from css import css
+from numpy import linspace
 
 linkedin_url = 'https://www.linkedin.com/in/sinbo/'
 
@@ -18,6 +19,7 @@ with st.sidebar:
     time_to_maturity = st.number_input("Time to Maturity (Years)", value=1.0, step=1.0, min_value=0.01)
     volatility = st.number_input("Volatility (σ)", value=0.2, min_value=0.0)
     interest_rate = st.number_input("Risk-Free Interest Rate", value=0.05)
+
 
     C, P = blackScholes(current_price=current_price, strike_price=strike, time_to_maturity=time_to_maturity, volatility=volatility, interest_rate=interest_rate)
     st.markdown(f'Call Price: {C}')
@@ -59,7 +61,6 @@ fig, ax = plt.subplots()
 
 # Set static axes limits
 ax.set_xlim(x_min, x_max)
-print(y_min, y_max)
 ax.set_ylim(y_min, y_max)
 
 # Animation loop
@@ -77,11 +78,27 @@ for i in range(1, len(data) + 1, 10):
     ax.set_xlim(x_min, x_max)
     ax.set_ylim(y_min, y_max)
 
+    # X Axis Labels
     ax.xaxis.set_major_locator(mdates.MonthLocator())
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %Y'))
     plt.setp(ax.get_xticklabels(), rotation=45, ha='right')
 
 
     plot_placeholder.pyplot(fig)
-    
-    # Wait a short time before showing the next frame
+
+
+st.title("Options Price - Interactive Heatmap")
+col1, col2 = st.columns([1,1], gap="small")
+
+spot_range = linspace(current_price - 20, current_price + 20, 10)
+vol_range = linspace(volatility - 0.1, volatility + 0.1, 10)
+
+heatmap_fig_call, heatmap_fig_put = plot_heatmap(strike=strike, time_to_maturity=time_to_maturity, interest_rate=interest_rate, spot_range=spot_range, vol_range=vol_range)
+
+with col1:
+    st.subheader("Call Price Heatmap")
+    st.pyplot(heatmap_fig_call)
+
+with col2:
+    st.subheader("Put Price Heatmap")
+    st.pyplot(heatmap_fig_put)
