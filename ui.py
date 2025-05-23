@@ -68,7 +68,7 @@ with col2:
     st.pyplot(heatmap_fig_put)
 
 
-
+st.title("Stock Plotting")
 
 data = stockdata()
 # Get axis limits
