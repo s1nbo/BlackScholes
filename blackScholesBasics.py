@@ -43,6 +43,7 @@ def plot_heatmap(spot_range, vol_range, strike, time_to_maturity, interest_rate)
     ax_put.set_title('PUT')
     ax_put.set_xlabel('Spot Price')
     ax_put.set_ylabel('Volatility')
+    # TODO make the heatmaps the same size ...
 
     return fig_call, fig_put
 
