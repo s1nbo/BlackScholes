@@ -1,25 +1,35 @@
-from numpy import log, sqrt, exp
+import numpy as np
 from scipy.stats import norm as N
 from numpy import zeros, round
 from matplotlib.pyplot import subplots
 from seaborn import heatmap
    
-def blackScholes(time_to_maturity:float, current_price:float, strike_price:float, interest_rate:float, volatility:float):
-    S_t = current_price
-    r = interest_rate
-    K = strike_price
-    sigma = volatility
-    t = time_to_maturity
+def blackScholes(t:float, S_t:float, K:float, r:float, sigma:float) -> tuple[float, float]:
+    """
+    Black-Scholes option pricing model for European call and put options.
+    Parameters:
+        S_t (float): current_price
+        K(float): strike_price
+        r(float): interest_rate
+        sigma(float): volatility
+        t(float): time_to_maturity
+    
+    Returns:
+            [float, float]: call_price, put_price
+    """
 
     # Intermediate Step
-    d1 = ( log(S_t/K) + (r + 0.5 * sigma**2)*t ) / ( sigma * sqrt(t))
-    d2 = d1 - sigma * sqrt(t)
+
+    sqrt_t = np.sqrt(t) * sigma
+    d1 = ( np.log(S_t / K) + (r + 0.5 * sigma**2) * t ) / sqrt_t
+    d2 = d1 - sqrt_t
 
     # Calculate Call and Put Price
-    C = N.cdf(d1)*S_t - N.cdf(d2)*K*exp(-r*t)
-    P = K * exp(-r*t) * N.cdf(-d2) - current_price * N.cdf(-d1)
+    discounted_k = K * np.exp(-r * t)
+    call = N.cdf(d1) * S_t - N.cdf(d2) * discounted_k
+    put = discounted_k * N.cdf(-d2) - S_t * N.cdf(-d1)
 
-    return C, P
+    return call, put
 
 def plot_heatmap(spot_range, vol_range, strike, time_to_maturity, interest_rate):
     call_prices = zeros((len(vol_range), len(spot_range)))
