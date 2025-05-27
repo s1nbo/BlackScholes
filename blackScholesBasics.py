@@ -47,8 +47,6 @@ def plot_heatmap(spot_range, vol_range, strike, time_to_maturity, interest_rate)
 
     return fig_call, fig_put
 
-    
-
 
 
 if __name__ == "__main__":

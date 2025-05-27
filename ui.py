@@ -1,8 +1,5 @@
 import streamlit as st
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
 from blackScholesBasics import blackScholes, plot_heatmap
-from stockdata import stockdata
 from css import css
 from numpy import linspace
 
@@ -49,9 +46,6 @@ with col2:
             </div>
         </div>
     """, unsafe_allow_html=True)
-
-
-
 
 
 st.title("Options Price - Interactive Heatmap")
