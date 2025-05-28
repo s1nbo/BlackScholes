@@ -69,3 +69,8 @@ with col1:
 with col2:
     st.subheader("Put Price Heatmap")
     st.pyplot(heatmap_fig_put)
+
+
+# TODO
+# Next Step is to give the be able to enter a Purchase price for Calls or Puts an then we can calculate profit / Loss of that option.
+# Save inputs and outputs to a Relational Database - Input Table, Output Table.
