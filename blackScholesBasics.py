@@ -40,7 +40,7 @@ def plot_heatmap(spot_range, vol_range, strike, time_to_maturity, interest_rate)
     s_flat = spot_grid.ravel()
     v_flat = vol_grid.ravel()
     
-    call_flat, put_flat = blackScholes(t=time_to_maturity, S_t= s_flat, K=strike, r=interest_rate, sigma= v_flat)
+    call_flat, put_flat = blackScholes(t=time_to_maturity, S_t= s_flat, K=strike, r=interest_rate, sigma=v_flat)
     
     call_prices = call_flat.reshape(vol_grid.shape)
     put_prices = put_flat.reshape(vol_grid.shape)
