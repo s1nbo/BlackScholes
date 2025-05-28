@@ -17,8 +17,7 @@ with st.sidebar:
     volatility = st.number_input("Volatility (σ)", value=0.2, min_value=0.0)
     interest_rate = st.number_input("Risk-Free Interest Rate", value=0.05)
 
-    call, put = blackScholes(
-        S_t = current_price, 
+    call, put = blackScholes( S_t = current_price, 
         K = strike, 
         t = time_to_maturity, 
         sigma = volatility, 
