@@ -17,12 +17,12 @@ with st.sidebar:
     volatility = st.number_input("Volatility (σ)", value=0.2, min_value=0.0)
     interest_rate = st.number_input("Risk-Free Interest Rate", value=0.05)
 
-    C, P = blackScholes(
-        current_price=current_price, 
-        strike_price=strike, 
-        time_to_maturity=time_to_maturity, 
-        volatility=volatility, 
-        interest_rate=interest_rate
+    call, put = blackScholes(
+        S_t = current_price, 
+        K = strike, 
+        t = time_to_maturity, 
+        sigma = volatility, 
+        r = interest_rate
     )
 
 col1, col2 = st.columns([1,1], gap="small")
@@ -32,7 +32,7 @@ with col1:
         <div class="metric-container metric-call">
             <div>
                 <div class="metric-label">CALL Value</div>
-                <div class="metric-value">${C:.2f}</div>
+                <div class="metric-value">${call:.2f}</div>
             </div>
         </div>
     """, unsafe_allow_html=True)
@@ -42,7 +42,7 @@ with col2:
         <div class="metric-container metric-put">
             <div>
                 <div class="metric-label">PUT Value</div>
-                <div class="metric-value">${P:.2f}</div>
+                <div class="metric-value">${put:.2f}</div>
             </div>
         </div>
     """, unsafe_allow_html=True)

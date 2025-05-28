@@ -1,25 +1,28 @@
+from typing import Tuple, Union
 import numpy as np
 from scipy.stats import norm as N
-from numpy import zeros, round
-from matplotlib.pyplot import subplots
-from seaborn import heatmap
+import matplotlib.pyplot as plt
+import seaborn as sns
+import matplotlib
+
+matplotlib.use("Agg")
+
    
-def blackScholes(t:float, S_t:float, K:float, r:float, sigma:float) -> tuple[float, float]:
+def blackScholes(S_t:Union[float, np.ndarray], K:float, r:float, sigma:Union[float, np.ndarray], t:float) -> Tuple[Union[float, np.ndarray], Union[float, np.ndarray]]:
     """
     Black-Scholes option pricing model for European call and put options.
     Parameters:
-        S_t (float): current_price
+        S_t (float or np.ndarray): current_price
         K(float): strike_price
         r(float): interest_rate
-        sigma(float): volatility
+        sigma(float or np.ndarray): volatility
         t(float): time_to_maturity
     
     Returns:
-            [float, float]: call_price, put_price
+        tuple: [float or np.ndarray, float or np.ndarray]: Call and put option price(s)
     """
 
     # Intermediate Step
-
     sqrt_t = np.sqrt(t) * sigma
     d1 = ( np.log(S_t / K) + (r + 0.5 * sigma**2) * t ) / sqrt_t
     d2 = d1 - sqrt_t
@@ -32,34 +35,39 @@ def blackScholes(t:float, S_t:float, K:float, r:float, sigma:float) -> tuple[flo
     return call, put
 
 def plot_heatmap(spot_range, vol_range, strike, time_to_maturity, interest_rate):
-    call_prices = zeros((len(vol_range), len(spot_range)))
-    put_prices = zeros((len(vol_range), len(spot_range)))
+    # Vectorized Calculation
+    spot_grid, vol_grid = np.meshgrid(spot_range, vol_range)
+    s_flat = spot_grid.ravel()
+    v_flat = vol_grid.ravel()
     
-    for i, vol in enumerate(vol_range):
-        for j, spot in enumerate(spot_range):
-            C, P = blackScholes(time_to_maturity=time_to_maturity, current_price=spot, strike_price=strike, interest_rate=interest_rate, volatility=vol)
+    call_flat, put_flat = blackScholes(t=time_to_maturity, S_t= s_flat, K=strike, r=interest_rate, sigma= v_flat)
+    
+    call_prices = call_flat.reshape(vol_grid.shape)
+    put_prices = put_flat.reshape(vol_grid.shape)
 
-            call_prices[i, j] = C
-            put_prices[i, j] = P
+    # Plotting
+    fig_kwargs = dict(figsize=(10, 8), dpi=100)
+    x_ticks = np.round(spot_range, 2)
+    y_ticks = np.round(vol_range, 2)
     
-    fig_call, ax_call = subplots(figsize=(10, 8))
-    heatmap(call_prices, xticklabels=round(spot_range, 2), yticklabels=round(vol_range, 2), annot=True, fmt=".2f", cmap="YlOrBr", ax=ax_call)
+    fig_call, ax_call = plt.subplots(**fig_kwargs)
+    sns.heatmap(call_prices, xticklabels=x_ticks, yticklabels=y_ticks, annot=True, fmt=".2f", cmap="YlOrBr", ax=ax_call, cbar=False)
     ax_call.set_title('CALL')
     ax_call.set_xlabel('Spot Price')
     ax_call.set_ylabel('Volatility')
     
-    fig_put, ax_put = subplots(figsize=(10, 8))
-    heatmap(put_prices, xticklabels=round(spot_range, 2), yticklabels=round(vol_range, 2), annot=True, fmt=".2f", cmap="YlOrBr", ax=ax_put)
+    fig_put, ax_put = plt.subplots(**fig_kwargs)
+    sns.heatmap(put_prices, xticklabels=x_ticks, yticklabels=y_ticks, annot=True, fmt=".2f", cmap="YlOrBr", ax=ax_put, cbar=False)
     ax_put.set_title('PUT')
     ax_put.set_xlabel('Spot Price')
     ax_put.set_ylabel('Volatility')
-    # TODO make the heatmaps the same size ...
+
 
     return fig_call, fig_put
 
 
 
 if __name__ == "__main__":
-    C, P = blackScholes(current_price=100, strike_price=100, time_to_maturity=1, volatility=0.2, interest_rate=0.05)
+    C, P = blackScholes(S_t=100, K=100, t=1, sigma=0.2, r=0.05)
     print(C, P)
     
