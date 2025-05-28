@@ -11,6 +11,13 @@ https://optionmodel.streamlit.app/
 
 ```bash
 git clone https://github.com/s1nbo/BlackScholes.git
+```
+```bash
 cd BlackScholes
+```
+```bash
 pip install -r requirements.txt
+```
+```bash
 streamlit run ui.py
+```
